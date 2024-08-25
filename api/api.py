@@ -1,9 +1,8 @@
 import os
 import json
 import smtplib, ssl
-from email.mime.text import MIMEText
-from email.header import Header
 from datetime import datetime, timedelta
+
 
 # Defining variables
 deleted_ip_list = []
@@ -40,9 +39,20 @@ def list_ip_addresses(compute, project, region):
             return
         # Looping through the IPs in the response
         for address in response['items']:
-            # If the IP is external and reserved, append it to the `deleted_ip_list` (note that the IP is not actually deleted)
+            # If the IP is external and reserved, append it to the `deleted_ip_list` (note that the IP is not actually deleted yet.)
             if address['addressType'] == 'EXTERNAL' and address['status'] == 'RESERVED':
                 deleted_ip_list.append(address['name'] + ' ' + address['address'] + ' ' + project + ' ' + address['status'] + ' ' + project + '\n')
+                # deleting the static IP address
+                delete_static_address(compute, project, region, str(address['address']))
         # Getting the next page of IPs
         request = compute.addresses().list_next(previous_request=request, previous_response=response)
     return deleted_ip_list
+
+
+
+# `delete_static_address` is a method that deletes the static IP address using the `compute.addresses().delete` method from the googleapiclient.discovery library
+def delete_static_address(compute, project, region, address):
+    request = compute.addresses().delete(project=project, region=region, address=address)
+    response = request.execute()
+    print(response)
+    return

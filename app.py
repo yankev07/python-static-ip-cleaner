@@ -46,6 +46,7 @@ def index():
                 print(str(len(ip_list)) + ' Static IP addresses found in region: ', regions_list[i])
     # Removing duplicate IPs from the list
     cleaned_ip_list = list(set(deleted_ips_list))
+    print("In total, " + str(len(cleaned_ip_list)) + " static IPs were found and cleaned!")
     print("Process Compteted..")
     # Returning the cleaned list of IPs as a JSON response
     return jsonify(cleaned_ip_list)
@@ -53,5 +54,5 @@ def index():
 
 # The code below is executed if the file is run as a script
 if __name__ == '__main__':
-    # Running the Flask app on port 5000
+    # Running the Flask app on port 3000
     app.run(host="0.0.0.0", port=3000, debug=True)
