@@ -43,7 +43,7 @@ def list_ip_addresses(compute, project, region):
             if address['addressType'] == 'EXTERNAL' and address['status'] == 'RESERVED':
                 deleted_ip_list.append(address['name'] + ' ' + address['address'] + ' ' + project + ' ' + address['status'] + ' ' + project + '\n')
                 # deleting the static IP address
-                delete_static_address(compute, project, region, str(address['address']))
+                delete_static_address(compute, project, region, str(address['name']))
         # Getting the next page of IPs
         request = compute.addresses().list_next(previous_request=request, previous_response=response)
     return deleted_ip_list
